@@ -28,7 +28,12 @@ RUN upx /go/bin/tailscale && upx /go/bin/tailscaled
 
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates iptables iptables-legacy iproute2 bash openssh curl jq
+RUN apk add --no-cache ca-certificates iptables iptables-legacy iproute2 bash openssh curl jq \
+    python3 py3-pip
+
+# Install MCP and RouterOS API dependencies
+RUN python3 -m venv /opt/mcp-env && \
+    /opt/mcp-env/bin/pip install --no-cache-dir mcp routeros-api
 
 RUN ln -s /usr/sbin/iptables-legacy /usr/local/bin/iptables
 RUN ln -s /usr/sbin/ip6tables-legacy /usr/local/bin/ip6tables
@@ -38,6 +43,7 @@ RUN ssh-keygen -A
 COPY --from=build-env /go/bin/* /usr/local/bin/
 COPY sshd_config /etc/ssh/
 COPY tailscale.sh /usr/local/bin/
+COPY mcp_server.py /usr/local/bin/
 
 EXPOSE 22
 CMD ["/usr/local/bin/tailscale.sh"]
