@@ -1,0 +1,4 @@
+tailscale/
+__pycache__/
+*.tar
+*.log
