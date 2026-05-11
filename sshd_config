@@ -1,0 +1,9 @@
+PermitRootLogin yes
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication yes
+Subsystem sftp /usr/lib/ssh/sftp-server
+AllowTcpForwarding yes
+GatewayPorts no
+X11Forwarding no
+PrintMotd yes
+TCPKeepAlive yes
